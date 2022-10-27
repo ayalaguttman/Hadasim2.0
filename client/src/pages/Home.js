@@ -2,13 +2,13 @@ import React ,{useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from "axios";
-//import ".Home.css";
+
 
 function Home() {
   const [patientInfo, setPatientInfo] = useState([]);
 
   const loadData = async () => {
-    const response = await axios.get("http://localhost:3000/api/get");
+    const response = await axios.get("http://localhost:3001/api/get");
     setPatientInfo(response.data);
     console.log('done');
   }
@@ -21,26 +21,35 @@ function Home() {
     if(
       window.confirm("Are you sure that you want to delete that patient ?")
       ){
-        axios.delete(`http://localhost:3000/api/remove/${id}`);
+        axios.delete(`http://localhost:3001/api/remove/${id}`);
         toast.success("Patient Deleted Successfully");
         setTimeout(() => loadData(), 500);
       }
   }
   return (
-    <div  style={{marginTop:"150px"}}>
-        <h2>Home</h2>
-        <h2>patient info</h2>
+    <div className='container' style={{marginTop:"50px"}}>
+      <div class="row">
+        <div class="col-md-6">
+        <h2>patients</h2>
+        </div>
+        <div class="col-md-6">
         <Link to="/addPatient">
-        <button>Add patient</button>
+        <button type="button" class="btn btn-primary">Add patient</button>
         </Link>
-        <table className='styled-table'>
+        </div>
+
+      </div>
+      <br/>
+     
+      
+        <table class="table">
           <thead>
             <tr>
-            <th style={{textAlign:"center"}}>.no</th>
-              <th style={{textAlign:"center"}}>id</th>
-              <th style={{textAlign:"center"}}>First name</th>
-              <th style={{textAlign:"center"}}>Last name</th>
-              <th style={{textAlign:"center"}}>Action</th>
+            <th scope="col" style={{textAlign:"center"}}>.no</th>
+              <th scope="col" style={{textAlign:"center"}}>id</th>
+              <th scope="col" style={{textAlign:"center"}}>First name</th>
+              <th scope="col" style={{textAlign:"center"}}>Last name</th>
+              <th scope="col"style={{textAlign:"center"}}>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -51,15 +60,15 @@ function Home() {
                   <td>{item.patientId}</td>
                   <td>{item.firstName}</td>
                   <td>{item.lastName}</td>
-                  <td>
+                  <td >
                     <Link to={`/update/${item.patientId}`}>
-                      <button>Edit</button>
+                      <button type="button" class="btn btn-outline-primary">Edit</button>
                     </Link>
-                    
-                      <button onClick={() =>deletPatient(item.patientId)}>Delete</button>
-                    
+                    <Link>
+                      <button type="button" class="btn btn-outline-danger" onClick={() => deletPatient(item.patientId)}>Delete</button>
+                    </Link>
                     <Link to={`/view/${item.patientId}`}>
-                      <button>view details</button>
+                      <button type="button" class="btn btn-outline-info"> view details</button>
                     </Link>
                   </td>
                 </tr>
@@ -68,6 +77,7 @@ function Home() {
           </tbody>
 
         </table>
+        
     </div>
   )
 }
